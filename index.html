@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore di Passaporto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #passportCanvas {
+            border: 1px solid #000;
+        }
+        .input-container {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generatore di Passaporto</h1>
+    <div class="input-container">
+        <label for="backgroundImage">Carica Immagine di Sfondo:</label>
+        <input type="file" id="backgroundImage" accept="image/*">
+    </div>
+    <div class="input-container">
+        <label for="photoImage">Carica Foto Tessera:</label>
+        <input type="file" id="photoImage" accept="image/*">
+    </div>
+    <div class="input-container">
+        <label for="firstName">Nome:</label>
+        <input type="text" id="firstName">
+    </div>
+    <div class="input-container">
+        <label for="lastName">Cognome:</label>
+        <input type="text" id="lastName">
+    </div>
+    <div class="input-container">
+        <label for="dob">Data di Nascita:</label>
+        <input type="date" id="dob">
+    </div>
+    <button onclick="generatePassport()">Genera Passaporto</button>
+    <canvas id="passportCanvas" width="600" height="400"></canvas>
+    <button onclick="downloadPassport()">Scarica come PNG</button>
+
+    <script>
+        function generatePassport() {
+            const canvas = document.getElementById('passportCanvas');
+            const context = canvas.getContext('2d');
+
+            const backgroundImage = document.getElementById('backgroundImage').files[0];
+            const photoImage = document.getElementById('photoImage').files[0];
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const dob = document.getElementById('dob').value;
+
+            if (backgroundImage && photoImage && firstName && lastName && dob) {
+                const bgImg = new Image();
+                const photoImg = new Image();
+
+                bgImg.onload = function() {
+                    context.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+                    photoImg.onload = function() {
+                        context.drawImage(photoImg, 50, 50, 100, 100);
+
+                        context.font = '20px Arial';
+                        context.fillStyle = 'black';
+                        context.fillText(`Nome: ${firstName}`, 200, 100);
+                        context.fillText(`Cognome: ${lastName}`, 200, 130);
+                        context.fillText(`Data di Nascita: ${dob}`, 200, 160);
+                    };
+
+                    const photoReader = new FileReader();
+                    photoReader.onload = function(event) {
+                        photoImg.src = event.target.result;
+                    };
+                    photoReader.readAsDataURL(photoImage);
+                };
+
+                const bgReader = new FileReader();
+                bgReader.onload = function(event) {
+                    bgImg.src = event.target.result;
+                };
+                bgReader.readAsDataURL(backgroundImage);
+            } else {
+                alert('Per favore, carica tutte le immagini e inserisci tutti i dati.');
+            }
+        }
+
+        function downloadPassport() {
+            const canvas = document.getElementById('passportCanvas');
+            const link = document.createElement('a');
+            link.download = 'passaporto.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
