@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Kingdom of Trenchland Passport Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
   <style>
     /* Page styles */
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Alice', serif;
       margin: 0;
       padding: 0;
       background: url('sito.png') no-repeat center center fixed;
@@ -49,6 +50,7 @@
       width: 100%;
       padding: 8px;
       box-sizing: border-box;
+      font-family: 'Alice', serif;
     }
 
     button {
@@ -63,6 +65,7 @@
       font-weight: bold;
       text-shadow: 1px 1px 2px #000;
       transition: background-color 0.3s ease-in-out;
+      font-family: 'Alice', serif;
     }
 
     button:hover {
@@ -75,6 +78,7 @@
       display: block;
       max-width: 100%;
       height: auto;
+      font-family: 'Alice', serif;
     }
   </style>
 </head>
@@ -99,7 +103,6 @@
   </div>
 
   <script>
-    // Random generator functions
     function getRandomElement(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
@@ -115,7 +118,6 @@
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    // Data for random generation
     const nobilityTitles = [
       "Degen Peasant", "Paper-Handed Commoner", "Shitcoin Citizen", 
       "HODL Plebeian", "Ape Freeman", "NFT Noble", "Baron of Airdrops", 
@@ -143,7 +145,6 @@
         return;
       }
 
-      // Generate random values
       const status = `STATUS: ${getRandomElement(nobilityTitles)}`;
       const address = `ADDRESS: ${getRandomNumber(1, 9999)} ${getRandomElement(streets)}, ${getRandomElement(cities)}`;
       const issued = `ISSUED: ${getRandomDate()}`;
@@ -152,7 +153,6 @@
       const height = `HEIGHT: ${getRandomNumber(140, 210)} cm`;
       const weight = `WEIGHT: ${getRandomNumber(40, 150)} kg`;
 
-      // Create Image objects
       const baseImg = new Image();
       baseImg.src = 'base.png';
 
@@ -170,10 +170,9 @@
 
       photoImg.onload = function() {
         context.drawImage(photoImg, 50, 50, 100, 100);
-        context.font = '18px Arial';
+        context.font = '18px Alice, serif';
         context.fillStyle = 'black';
 
-        // Position text
         let yPosition = 180;
         context.fillText(`NAME: ${nameValue}`, 50, yPosition);
         yPosition += 30;
