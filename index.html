@@ -1,105 +1,192 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generatore di Passaporto</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #passportCanvas {
-            border: 1px solid #000;
-        }
-        .input-container {
-            margin-bottom: 15px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Kingdom of Trenchland Passport Generator</title>
+  <style>
+    /* Page styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      /* Degen background image for the site */
+      background: url('sito.png') no-repeat center center fixed;
+      background-size: cover;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #fff;
+      text-shadow: 2px 2px 4px #000;
+      margin-top: 20px;
+      font-size: 2rem;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .input-container {
+      margin: 15px 0;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff9900;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px #000;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #e68a00;
+    }
+
+    #passportCanvas {
+      border: 2px solid #000;
+      margin-top: 20px;
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
-    <h1>Generatore di Passaporto</h1>
+
+  <h1>Create Your Own Passport of the Kingdom of Trenchland!</h1>
+
+  <div class="container">
     <div class="input-container">
-        <label for="backgroundImage">Carica Immagine di Sfondo:</label>
-        <input type="file" id="backgroundImage" accept="image/*">
+      <label for="photoImage">Upload Your Photo:</label>
+      <input type="file" id="photoImage" accept="image/*">
     </div>
+
     <div class="input-container">
-        <label for="photoImage">Carica Foto Tessera:</label>
-        <input type="file" id="photoImage" accept="image/*">
+      <label for="nameInput">NAME:</label>
+      <input type="text" id="nameInput" placeholder="Enter your name...">
     </div>
-    <div class="input-container">
-        <label for="firstName">Nome:</label>
-        <input type="text" id="firstName">
-    </div>
-    <div class="input-container">
-        <label for="lastName">Cognome:</label>
-        <input type="text" id="lastName">
-    </div>
-    <div class="input-container">
-        <label for="dob">Data di Nascita:</label>
-        <input type="date" id="dob">
-    </div>
-    <button onclick="generatePassport()">Genera Passaporto</button>
+
+    <button onclick="generatePassport()">Generate Passport</button>
     <canvas id="passportCanvas" width="600" height="400"></canvas>
-    <button onclick="downloadPassport()">Scarica come PNG</button>
+    <button onclick="downloadPassport()">Download as PNG</button>
+  </div>
 
-    <script>
-        function generatePassport() {
-            const canvas = document.getElementById('passportCanvas');
-            const context = canvas.getContext('2d');
+  <script>
+    // 10 crypto-degen roles
+    const roles = [
+      "Degen Peasant",
+      "Paper-Handed Commoner",
+      "Shitcoin Citizen",
+      "HODL Plebeian",
+      "Ape Freeman",
+      "NFT Noble",
+      "Baron of Airdrops",
+      "Viscount of Gas Fees",
+      "Whale Count",
+      "Diamond-Hand Duke"
+    ];
 
-            const backgroundImage = document.getElementById('backgroundImage').files[0];
-            const photoImage = document.getElementById('photoImage').files[0];
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const dob = document.getElementById('dob').value;
+    // Random date of birth generator
+    function getRandomDate(startYear = 1970, endYear = 2005) {
+      const start = new Date(startYear, 0, 1).getTime();
+      const end = new Date(endYear, 0, 1).getTime();
+      const randomTime = new Date(start + Math.random() * (end - start));
 
-            if (backgroundImage && photoImage && firstName && lastName && dob) {
-                const bgImg = new Image();
-                const photoImg = new Image();
+      const year = randomTime.getFullYear();
+      let month = (randomTime.getMonth() + 1).toString().padStart(2, "0");
+      let day = randomTime.getDate().toString().padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
 
-                bgImg.onload = function() {
-                    context.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+    function generatePassport() {
+      const canvas = document.getElementById('passportCanvas');
+      const context = canvas.getContext('2d');
 
-                    photoImg.onload = function() {
-                        context.drawImage(photoImg, 50, 50, 100, 100);
+      const photoFile = document.getElementById('photoImage').files[0];
+      const nameValue = document.getElementById('nameInput').value.trim();
 
-                        context.font = '20px Arial';
-                        context.fillStyle = 'black';
-                        context.fillText(`Nome: ${firstName}`, 200, 100);
-                        context.fillText(`Cognome: ${lastName}`, 200, 130);
-                        context.fillText(`Data di Nascita: ${dob}`, 200, 160);
-                    };
+      if (!nameValue) {
+        alert("Please enter your name!");
+        return;
+      }
 
-                    const photoReader = new FileReader();
-                    photoReader.onload = function(event) {
-                        photoImg.src = event.target.result;
-                    };
-                    photoReader.readAsDataURL(photoImage);
-                };
+      if (!photoFile) {
+        alert("Please upload your photo!");
+        return;
+      }
 
-                const bgReader = new FileReader();
-                bgReader.onload = function(event) {
-                    bgImg.src = event.target.result;
-                };
-                bgReader.readAsDataURL(backgroundImage);
-            } else {
-                alert('Per favore, carica tutte le immagini e inserisci tutti i dati.');
-            }
-        }
+      // Generate random date and random role
+      const randomDOB = getRandomDate();
+      const randomRole = roles[Math.floor(Math.random() * roles.length)];
 
-        function downloadPassport() {
-            const canvas = document.getElementById('passportCanvas');
-            const link = document.createElement('a');
-            link.download = 'passaporto.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        }
-    </script>
+      // Create Image objects for base (passport) and the uploaded photo
+      const baseImg = new Image();
+      baseImg.src = 'base.png'; // Use the default base passport image you have
+
+      const photoImg = new Image();
+
+      baseImg.onload = function() {
+        // Draw the base background on canvas
+        context.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+        const photoReader = new FileReader();
+        photoReader.onload = function(e) {
+          photoImg.src = e.target.result;
+        };
+        photoReader.readAsDataURL(photoFile);
+      };
+
+      photoImg.onload = function() {
+        // Draw the photo (size and position as you prefer)
+        context.drawImage(photoImg, 50, 50, 100, 100);
+
+        // Write texts: NAME, DATE OF BIRTH, ROLE
+        context.font = '18px Arial';
+        context.fillStyle = 'black';
+
+        // Position them under the photo
+        context.fillText(`NAME: ${nameValue}`, 50, 180);
+        context.fillText(`DATE OF BIRTH: ${randomDOB}`, 50, 210);
+        context.fillText(randomRole, 50, 240);
+      };
+    }
+
+    function downloadPassport() {
+      const canvas = document.getElementById('passportCanvas');
+      const link = document.createElement('a');
+      link.download = 'trenchland_passport.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+  </script>
 </body>
 </html>
