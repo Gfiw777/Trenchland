@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Kingdom of Trenchland Passport Generator</title>
+  <!-- Aggiunta meta viewport per il responsive design -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
   <style>
     /* Page styles */
@@ -10,8 +13,10 @@
       font-family: 'Alice', serif;
       margin: 0;
       padding: 0;
+      /* Sfondo di default (per desktop/tablet) */
       background: url('sito.png') no-repeat center center fixed;
       background-size: cover;
+
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -19,11 +24,20 @@
       min-height: 100vh;
     }
 
+    /* Quando la larghezza dello schermo è minore o uguale a 768px, uso un altro sfondo */
+    @media only screen and (max-width: 768px) {
+      body {
+        background: url('sito_mobile.png') no-repeat center center fixed;
+        background-size: cover;
+      }
+    }
+
     h1 {
       color: #fff;
       text-shadow: 2px 2px 4px #000;
       margin-top: 20px;
       font-size: 2rem;
+      text-align: center;
     }
 
     .container {
@@ -72,13 +86,15 @@
       background-color: #e68a00;
     }
 
+    /* Rendi il canvas ridimensionabile (responsive) */
     #passportCanvas {
       border: 2px solid #000;
       margin-top: 20px;
       display: block;
-      max-width: 100%;
-      height: auto;
+      width: 100%;
+      height: auto; /* auto permette di mantenere le proporzioni */
       font-family: 'Alice', serif;
+      max-width: 600px; /* per non sforare su desktop */
     }
   </style>
 </head>
@@ -98,6 +114,8 @@
     </div>
 
     <button onclick="generatePassport()">Generate Passport</button>
+    <!-- Mantieni il canvas di dimensioni "virtuali" 600x400 per la grafica,
+         ma tramite CSS lo rendiamo adattabile -->
     <canvas id="passportCanvas" width="600" height="400"></canvas>
     <button onclick="downloadPassport()">Download as PNG</button>
   </div>
@@ -154,7 +172,7 @@
       const weight = `WEIGHT: ${getRandomNumber(40, 150)} kg`;
 
       const baseImg = new Image();
-      baseImg.src = 'base.png';
+      baseImg.src = 'base.png';  // Immagine del passaporto di sfondo
 
       const photoImg = new Image();
 
